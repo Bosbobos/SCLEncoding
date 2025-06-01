@@ -15,6 +15,7 @@ class SCL:
         n = len(L1)
         for i in range(n):
             l.append(np.sign(L1[i]) * np.sign(L2[i]) * min(np.abs(L1[i]), np.abs(L2[i])))
+
         return l
 
 
@@ -22,11 +23,9 @@ class SCL:
     @staticmethod
     def R(L1, L2, b):
         G = []
-        # print(b)
-        # print(L1)
         for i in range(len(L2)):
             G.append(L2[i] + (1 - 2 * b[1][i]) * L1[i])
-        # print(G)
+
         return G
 
 
@@ -77,7 +76,6 @@ class SCL:
                     # Точно знаем, что у нас тут ошибка, добавляем модуль к метрике пути
                     decision.append((np.abs(y[0]), [0]))
                     decoded_list.append([0])
-            # print('decision ',decision)
 
             return (decision, decoded_list)
         else:
@@ -89,18 +87,11 @@ class SCL:
 
             Ldecision, Ldecoded_list = self.decode(left, d + 1, 2 * node, l) # Получаем декодированный вариант из левого нижнего поддерева
 
-            # print("this is arr1",arr1)
-
-            # print(Ldecision)
-            # print(Ldecoded_list)
-
             # Теперь подготавливаем список для передачи в правое поддерево
             # При этом создаём вариант для каждого из возможных решений в левом
             right = []
             for i in range(len(Ldecision)):
-                # print(arr1)
                 right.append(self.R(L1, L2, Ldecision[i]))
-            # print(right)
 
             # Декодируем правое поддерево для каждого из возможных случаев
             selection_list = []
@@ -109,7 +100,6 @@ class SCL:
                 for j in range(len(Rdecision)):
                     selection_list.append(self.xor(Ldecision[i], Rdecision[j], Ldecoded_list[i], Rdecoded_list[j]))
 
-            # print(selection_list)
             selection_list = sorted(selection_list, key = lambda x: x[0])[:self.max_paths]
 
             return_tuples = []
@@ -118,7 +108,4 @@ class SCL:
                 return_tuples.append((selection_list[i][0], selection_list[i][1]))
                 return_decoded_list.append(selection_list[i][2])
 
-            # print(return_tuples)
-
-            # print(return_decoded_list)
         return (return_tuples, return_decoded_list)
