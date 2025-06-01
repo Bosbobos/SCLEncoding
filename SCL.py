@@ -31,7 +31,7 @@ class SCL:
 
     # Функция XOR для объединения левого и правого детей узла
     @staticmethod
-    def xor(u1, u2, u1_list, u2_list):
+    def unify(u1, u2, u1_list, u2_list):
         res = []
         for i in range(len(u1[1])):
             res.append((u1[1][i] + u2[1][i]) % 2)
@@ -127,7 +127,7 @@ class SCL:
             for i in range(len(right)):
                 (Rdecision, Rdecoded_list) = self.decode(right[i], d + 1, 2 * node + 1, l)
                 for j in range(len(Rdecision)):
-                    selection_list.append(self.xor(Ldecision[i], Rdecision[j], Ldecoded_list[i], Rdecoded_list[j]))
+                    selection_list.append(self.unify(Ldecision[i], Rdecision[j], Ldecoded_list[i], Rdecoded_list[j]))
 
             selection_list = sorted(selection_list, key = lambda x: x[0])[:self.max_paths]
 
@@ -172,4 +172,3 @@ class SCL:
         # Печатаем строки таблицы
         for row in results:
             print(f"{str(row[0]):<{col_widths[0]}} | {str(row[1]):<{col_widths[1]}} | {str(row[2]):<{col_widths[2]}}")
-
