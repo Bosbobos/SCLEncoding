@@ -1,9 +1,11 @@
 from SCL import SCL
 
 if __name__ == '__main__':
-    N = 16
-    F = [0, 1, 2, 3, 4, 5, 8, 9]
-    scl = SCL(N, F)
-    code = '1'*8
-    encoded = scl.encode(code)
-    print(encoded)
+    N = 8 #Total bits
+    maxSize = 4 # Number of routes to save
+    F = [0,1,2,4] # Frozen bits positions
+    scl = SCL(N, F, maxSize)
+
+    encoded = [-1.3, -0.7, -0.15, 2.5, -0.18, 0.75, 1, -0.1]
+    result = scl.decode(encoded)
+    print(result)
