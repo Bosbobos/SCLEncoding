@@ -57,12 +57,10 @@ class SCL:
 
     # Итеративное кодирование с помощью матрицы G_N
     def encode(self, u):
-        N = self.N
-        n = int(np.log2(N))
         F = np.array([[1, 0],
                             [1, 1]], dtype=int)
         G = F
-        for _ in range(1, n):
+        for _ in range(1, self.n-1):
             G = np.kron(G, F)
 
         u = np.array(u) % 2
@@ -72,10 +70,7 @@ class SCL:
 
 
     # Основная функция декодирования
-    def decode(self, y, d = 0, node = 0, l=None):
-        if l is None:
-            l = [(0, []), []]
-
+    def decode(self, y, d = 0, node = 0):
         if d == self.n - 1:
             # Базовый случай, в котором мы дошли до листьев
             decision = []
@@ -114,7 +109,7 @@ class SCL:
 
             left = self.L(L1, L2) # Подготавливаем список через L-функцию для передачи ниже по дереву
 
-            Ldecision, Ldecoded_list = self.decode(left, d + 1, 2 * node, l) # Получаем декодированный вариант из левого нижнего поддерева
+            Ldecision, Ldecoded_list = self.decode(left, d + 1, 2 * node) # Получаем декодированный вариант из левого нижнего поддерева
 
             # Теперь подготавливаем список для передачи в правое поддерево
             # При этом создаём вариант для каждого из возможных решений в левом
@@ -125,7 +120,7 @@ class SCL:
             # Декодируем правое поддерево для каждого из возможных случаев
             selection_list = []
             for i in range(len(right)):
-                (Rdecision, Rdecoded_list) = self.decode(right[i], d + 1, 2 * node + 1, l)
+                (Rdecision, Rdecoded_list) = self.decode(right[i], d + 1, 2 * node + 1)
                 for j in range(len(Rdecision)):
                     selection_list.append(self.unify(Ldecision[i], Rdecision[j], Ldecoded_list[i], Rdecoded_list[j]))
 
